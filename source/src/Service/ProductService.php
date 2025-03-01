@@ -38,11 +38,11 @@ class ProductService
         $products = $queryBuilder->getQuery()->getResult();
 
         $totalProducts = $this->entityManager->getRepository(Product::class)->count([]);
-
+        
         return [
             "totalProducts" => $totalProducts,
             "filteredProducts" => count($products),
-            "data" => $products, // Direct return of DTOs, no iteration
+            "data" => $products,
         ];
     }
 }

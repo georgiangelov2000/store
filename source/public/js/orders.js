@@ -1,4 +1,11 @@
 $(function(){
+
+    let status =  {
+        1:"Created",
+        2:"Completed",
+        3:"Canceled"
+    };
+    
     let table = $(".table").DataTable({
         serverSide: true,
         ajax: {
@@ -25,10 +32,12 @@ $(function(){
                 "data": "status",
                 "orderable": false,
                 "render": function (data) {
-                    let statusClass = (data === "completed") ? "success" : (data === "canceled") ? "danger" : "warning";
-                    return `<span class="badge badge-${statusClass}">${data}</span>`;
+                    let statusText = status[data] || "Unknown"; // Get status name
+                    let statusClass = (data === 2) ? "success" : (data === 3) ? "danger" : "warning"; // Map status to a Bootstrap class
+            
+                    return `<span class="badge badge-${statusClass}">${statusText}</span>`;
                 }
-            },
+            },            
             {
                 "data": "total_price",
                 "orderable": true,
@@ -38,14 +47,39 @@ $(function(){
             },
             {
                 "orderable": false,
-                "render": function(data,type,row) {
-                    return `
-                        <button class="btn btn-sm shadow-sm btn-primary" onclick="confirmUpdateStatus(${row.id}, 2)"><i class="fa-solid fa-wrench"></i> Update Status</button>
-                        <button class="btn btn-sm shadow-sm btn-info" onclick="viewOrderItems(${row.id})"><i class="fa-solid fa-magnifying-glass"></i> Order Items</button>
-                        <button class="btn btn-sm shadow-sm btn-danger" onclick="confirmDeleteOrder(${row.id})"><i class="fa-solid fa-trash"></i> Delete</button>
-                    `;
+                "class": "text-center",
+                "render": function (data, type, row) {
+                    let buttons = '';
+                    console.log(row.status);
+                    if (row.status !== 1) {
+                        buttons += `<button class="mr-2 btn btn-sm shadow-sm btn-primary" onclick="confirmUpdateStatus(${row.id}, 1)">
+                                        <i class="fa-solid fa-plus"></i> Update to Created
+                                    </button>`;
+                    }
+            
+                    if (row.status !== 2) {
+                        buttons += `<button class="mr-2 btn btn-sm shadow-sm btn-success" onclick="confirmUpdateStatus(${row.id}, 2)">
+                                        <i class="fa-solid fa-check"></i> Update to Completed
+                                    </button>`;
+                    }
+            
+                    if (row.status !== 3) {
+                        buttons += `<button class="mr-2 btn btn-sm shadow-sm btn-danger" onclick="confirmUpdateStatus(${row.id}, 3)">
+                                        <i class="fa-solid fa-ban"></i> Update to Canceled
+                                    </button>`;
+                    }
+            
+                    buttons += `<button class="mr-2 btn btn-sm shadow-sm btn-info" onclick="viewOrderItems(${row.id})">
+                                    <i class="fa-solid fa-magnifying-glass"></i> Order Items
+                                </button>`;
+            
+                    buttons += `<button class="mr-2 btn btn-sm shadow-sm btn-warning" onclick="confirmDeleteOrder(${row.id})">
+                                    <i class="fa-solid fa-trash"></i> Delete
+                                </button>`;
+            
+                    return buttons;
                 }
-            }
+            }            
         ],
         order: [[0, "asc"]],
     });

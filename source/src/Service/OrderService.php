@@ -41,7 +41,6 @@ class OrderService extends BaseService
         $orderBuilder = new OrderBuilder($this->entityManager, $filters);
         $queryBuilder = $orderBuilder->applyFilters()->applySorting()->applyPagination()->getQueryBuilder();
         $orders = $queryBuilder->getQuery()->getResult();
-
         $totalOrders = $this->entityManager->getRepository(Order::class)->count([]);
 
         return [
@@ -49,7 +48,7 @@ class OrderService extends BaseService
             "filteredOrders" => count($orders),
             "data" => array_map(fn($order) => [
                 'id' => $order->getId(),
-                'status' => $order->getStatusLabel(),
+                'status' => $order->getStatus(),
                 'total_price' => $order->getTotalPrice(),
             ], $orders)
         ];
