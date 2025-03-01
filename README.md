@@ -51,3 +51,13 @@ http {
    docker ps
    ```
    - The application should be exposed on port `8000` inside the container.
+
+## 4. Docker Containers
+The following containers are running as part of this setup:
+
+```
+CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS                    PORTS                    NAMES
+e45ad64893e6   nginx:latest   "/docker-entrypoint.…"   21 minutes ago   Up 20 minutes (healthy)   127.0.0.1:8000->80/tcp   nginx_server
+2427af4efd50   store-app      "docker-php-entrypoi…"   21 minutes ago   Up 20 minutes (healthy)   9000/tcp                 php
+f9bb83a35b90   mysql:latest   "docker-entrypoint.s…"   21 minutes ago   Up 21 minutes (healthy)   3306/tcp, 33060/tcp      mysql_db
+```
