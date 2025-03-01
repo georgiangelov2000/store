@@ -52,7 +52,13 @@ http {
    ```
    - The application should be exposed on port `8000` inside the container.
 
-## 4. Docker Containers
+4. **Docker Containers**
+
+To start the necessary containers, run:
+```sh
+   docker compose up -d
+```
+
 The following containers are running as part of this setup:
 
 ```
@@ -61,6 +67,7 @@ e45ad64893e6   nginx:latest   "/docker-entrypoint.…"   21 minutes ago   Up 20 
 2427af4efd50   store-app      "docker-php-entrypoi…"   21 minutes ago   Up 20 minutes (healthy)   9000/tcp                 php
 f9bb83a35b90   mysql:latest   "docker-entrypoint.s…"   21 minutes ago   Up 21 minutes (healthy)   3306/tcp, 33060/tcp      mysql_db
 ```
+
 ## 5. Database Diagram
 
 Here is the database structure used in this project:
