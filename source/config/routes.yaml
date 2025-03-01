@@ -1,14 +1,14 @@
 api_order_create:
-    path: /api/v1/orders/create
+    path: /api/v1/orders
     controller: App\Controller\API\OrderController::createOrder
     methods: [POST]
-api_order_get:
-    path: /api/v1/orders/{id}
-    controller: App\Controller\API\OrderController::getOrder
-    methods: [GET]
 api_order_list:
     path: /api/v1/orders
     controller: App\Controller\API\OrderController::getOrders
+    methods: [GET]
+api_order_get:
+    path: /api/v1/orders/{id}
+    controller: App\Controller\API\OrderController::getOrder
     methods: [GET]
 api_order_items_list:
     path: /api/v1/orders/{id}/items

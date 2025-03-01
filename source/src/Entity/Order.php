@@ -43,7 +43,7 @@ class Order
         $this->items = new ArrayCollection();
     }
 
-    // 🔹 GETTERS
+    // GETTERS
 
     public function getId(): int
     {
@@ -85,7 +85,7 @@ class Order
         return $this->items;
     }
 
-    // 🔹 SETTERS
+    // SETTERS
 
     public function setStatus(int $status): static
     {
@@ -111,7 +111,7 @@ class Order
         return $this;
     }
 
-    // 🔹 Order Items Methods
+    // Order Items Methods
 
     public function addItem(OrderItem $item): static
     {

@@ -19,8 +19,8 @@ class GetOrderRequest
         $this->search = $request->query->get('search', '');
 
         // Map column index to actual field name
-        $columnIndex = (int) $request->query->get('order[0][column]', 0);
-        $validColumns = ['id', 'status', 'totalPrice']; // 🔹 Ensure valid fields
+        $columnIndex = (int) $request->query->get('order_column', 0);
+        $validColumns = ['id', 'status', 'totalPrice']; // Ensure valid fields
 
         // Convert index to column name, default to "id"
         $this->orderColumn = $validColumns[$columnIndex] ?? 'id';
