@@ -97,6 +97,13 @@ e45ad64893e6   nginx:latest   "/docker-entrypoint.…"   21 minutes ago   Up 20 
 f9bb83a35b90   mysql:latest   "docker-entrypoint.s…"   21 minutes ago   Up 21 minutes (healthy)   3306/tcp, 33060/tcp      mysql_db
 ```
 
+### `.env` File
+The `.env` file containing MySQL credentials is **tracked in Git** for this technical interview, so the team can locate them easily. You can find the credentials inside:
+
+```sh
+cat mysql/.env
+```
+
 ## 3. Database Diagram
 
 Here is the database structure used in this project:
@@ -200,8 +207,114 @@ products:
     controller: App\Controller\ProductController::index
 ```
 
+## 6. API CALLS
 
-## 5. Project Structure
+### 6.1. Create Order
+*   **Method:** `POST`
+*   **Path:** `/api/v1/orders`
+*   **Request Body:**
+```json
+{
+    "items": "AAAA"
+}
+```
+*   **Response:**
+```json
+{
+    "order_id": 1,
+    "status": "created",
+    "total_price": 200.00
+}
+```
+
+### 6.2. Get Orders
+*   **Method:** `GET`
+*   **Path:** `/api/v1/orders`
+*   **Response:**
+```json
+[
+    {
+        "order_id": 1,
+        "status": "completed",
+        "total_price": 200.00
+    }
+]
+```
+
+### 6.3. Get Order by ID
+*   **Method:** `GET`
+*   **Path:** `/api/v1/orders/{id}`
+*   **Response:**
+```json
+{
+    "order_id": 1,
+    "status": "completed",
+    "total_price": 200.00
+}
+```
+
+### 6.4. Get Order Items
+*   **Method:** `GET`
+*   **Path:** `/api/v1/orders/{id}/items`
+*   **Response:**
+```json
+{
+    "items": [
+        {
+            "id": 2,
+            "product": "Product A",
+            "sku": "A",
+            "quantity": 4,
+            "price": 180,
+            "discount_price": 0
+        }
+    ]
+}
+```
+
+### 6.5. Update Order Status
+*   **Method:** `PUT`
+*   **Path:** `/api/v1/orders/{id}/update-status`
+*   **Request Body:**
+```json
+{
+    "status": 2
+}
+```
+*   **Response:**
+```json
+{
+    "order_id": 1,
+    "status": "completed"
+}
+```
+
+### 6.6. Delete Order
+*   **Method:** `DELETE`
+*   **Path:** `/api/v1/orders/{id}/delete`
+*   **Response:**
+```json
+{
+    "message": "Order deleted successfully."
+}
+```
+
+### 6.7. List Products
+*   **Method:** `GET`
+*   **Path:** `/api/v1/products`
+*   **Response:**
+```json
+[
+    {
+        "product_id": 1,
+        "name": "Product A",
+        "sku": "A",
+        "unit_price": 50.00
+    }
+]
+```
+
+## 7. Project Structure
 
 ### `src/Builders/API/`
 Contains builders for constructing API-related data:
