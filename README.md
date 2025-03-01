@@ -3,7 +3,7 @@
 ## Overview
 This guide explains how to configure Nginx to bind a host machine to an internal Docker container running a web application.
 
-## Nginx Configuration
+## 1.Nginx Configuration
 The following configuration sets up Nginx as a reverse proxy to route traffic from the host machine to an internal application running on port `8000`.
 
 ### Configuration File: `/etc/nginx/nginx.conf`
@@ -37,7 +37,7 @@ http {
 }
 ```
 
-## Steps to Apply the Configuration
+## 2.Steps to Apply the Configuration
 1. **Update the Nginx configuration file**:
    - Save the above configuration in `/etc/nginx/nginx.conf`.
 
@@ -68,7 +68,7 @@ e45ad64893e6   nginx:latest   "/docker-entrypoint.…"   21 minutes ago   Up 20 
 f9bb83a35b90   mysql:latest   "docker-entrypoint.s…"   21 minutes ago   Up 21 minutes (healthy)   3306/tcp, 33060/tcp      mysql_db
 ```
 
-## 5. Database Diagram
+## 3. Database Diagram
 
 Here is the database structure used in this project:
 
@@ -122,7 +122,7 @@ public const STATUS_CANCELED = 3;
 +------------------+---------------+------+-----+-------------------+-------------------+
 ```
 
-## 6. API Routes
+## 4. API Routes
 
 The application exposes the following API endpoints:
 
@@ -172,7 +172,7 @@ products:
 ```
 
 
-## 7. Project Structure
+## 5. Project Structure
 
 ### `src/Builders/API/`
 Contains builders for constructing API-related data:
