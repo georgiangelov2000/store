@@ -51,8 +51,19 @@ class CheckoutService
                     throw new Exception("Product with SKU $sku not found");
                 }
     
-                $price = $this->calculatePrice($product->getUnitPrice(), $product->getSpecialQuantity(), $product->getSpecialPrice(), $quantity);
-                
+                $price = $this->calculatePrice(
+                    $product->getUnitPrice(), 
+                    $product->getSpecialQuantity(),
+                    $product->getSpecialPrice(), 
+                    $quantity
+                );
+                $discountPrice = $this->calculateDiscountPrice(
+                    $product->getUnitPrice(),
+                    $product->getSpecialQuantity(),
+                    $product->getSpecialPrice(),
+                    $quantity
+                );
+
                 $totalPrice += $price;
     
                 $orderItem = new OrderItem();
@@ -60,6 +71,7 @@ class CheckoutService
                 $orderItem->setProduct($product);
                 $orderItem->setQuantity($quantity);
                 $orderItem->setPrice($price);
+                $orderItem->setDiscount($discountPrice);
     
                 $this->entityManager->persist($orderItem);
             }
@@ -95,5 +107,29 @@ class CheckoutService
             return ($specialSetCount * $specialPrice) + ($remaining * $unitPrice);
         }
         return $quantity * $unitPrice;
+    }
+
+    /**
+     * Calculates the total discount applied on the order item.
+     *
+     * @param float $unitPrice The unit price of the product.
+     * @param int|null $specialQuantity The quantity required for the special price to apply (if exists).
+     * @param float|null $specialPrice The special price for the given quantity (if exists).
+     * @param int $quantity The quantity of the purchased product.
+     *
+     * @return float The total discount amount.
+     */
+    private function calculateDiscountPrice(float $unitPrice, ?int $specialQuantity, ?float $specialPrice, int $quantity): float
+    {
+        if ($specialQuantity && $specialPrice) {
+            $specialSetCount = intdiv($quantity, $specialQuantity);
+            $remaining = $quantity % $specialQuantity;
+
+            $normalPrice = ($specialSetCount * $specialQuantity * $unitPrice) + ($remaining * $unitPrice);
+            $discountedPrice = ($specialSetCount * $specialPrice) + ($remaining * $unitPrice);
+
+            return $normalPrice - $discountedPrice; // Total discount
+        }
+        return 0; // No discount applied
     }
 }
