@@ -58,6 +58,35 @@ To start the necessary containers, run:
 ```sh
    docker compose up -d
 ```
+5. **Database Isolation in Docker**
+
+The MySQL database runs inside a dedicated Docker container, ensuring isolation and security. It is only accessible from within the container network unless explicitly exposed. You can access the database inside the container using:
+
+```sh
+docker exec -it mysql_db bash
+```
+
+Once inside, connect to MySQL:
+
+```sh
+mysql -u site_ground_user -p
+```
+
+The database schema includes:
+
+```
+Databases:
+- checkout_db
+- information_schema
+- performance_schema
+
+Tables in `checkout_db`:
+- doctrine_migration_versions
+- messenger_messages
+- order_items
+- orders
+- products
+```
 
 The following containers are running as part of this setup:
 
