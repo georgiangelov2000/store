@@ -227,7 +227,7 @@ products:
 }
 ```
 
-### 6.3. Get Order by ID
+### 6.2. Get Order by ID
 *   **Method:** `GET`
 *   **Path:** `/api/v1/orders/{id}`
 *   **Response:**
@@ -239,7 +239,7 @@ products:
 }
 ```
 
-### 6.4. Get Order Items
+### 6.3. Get Order Items
 *   **Method:** `GET`
 *   **Path:** `/api/v1/orders/{id}/items`
 *   **Response:**
@@ -258,7 +258,7 @@ products:
 }
 ```
 
-### 6.5. Update Order Status
+### 6.4. Update Order Status
 *   **Method:** `PUT`
 *   **Path:** `/api/v1/orders/{id}/update-status`
 *   **Request Body:**
@@ -275,7 +275,7 @@ products:
 }
 ```
 
-### 6.6. Delete Order
+### 6.5. Delete Order
 *   **Method:** `DELETE`
 *   **Path:** `/api/v1/orders/{id}/delete`
 *   **Response:**
