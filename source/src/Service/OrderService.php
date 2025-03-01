@@ -79,7 +79,8 @@ class OrderService extends BaseService
                 'product' => $item->getProduct()->getName(),
                 'sku' => $item->getProduct()->getSku(),
                 'quantity' => $item->getQuantity(),
-                'price' => $item->getPrice()
+                'price' => $item->getPrice(),
+                'discount' => $item->getDiscount()
             ];
         }, $items->toArray());
     }

@@ -110,6 +110,7 @@ $(function(){
                             <th>SKU</th>
                             <th>Quantity</th>
                             <th>Price</th>
+                            <th>Discount</th>
                         </tr>
                     </thead>
                     <tbody>`;
@@ -122,6 +123,7 @@ $(function(){
                         <td>${item.sku}</td>
                         <td>${item.quantity}</td>
                         <td>$${parseFloat(item.price).toFixed(2)}</td>
+                        <td>$${parseFloat(item.discount).toFixed(2)}</td>
                     </tr>`;
             });
 

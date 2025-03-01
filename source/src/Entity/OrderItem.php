@@ -36,13 +36,16 @@ class OrderItem
     #[ORM\Column(type: "datetime", options: ["default" => "CURRENT_TIMESTAMP", "on update" => "CURRENT_TIMESTAMP"])]
     private DateTime $updatedAt;
 
+    #[ORM\Column(type: "decimal", precision: 10, scale: 2, options: ["default" => 0.00])]
+    private float $discount = 0.00; 
+
     public function __construct()
     {
         $this->createdAt = new DateTime();
         $this->updatedAt = new DateTime();
     }
 
-    // 🔹 GETTERS
+    // GETTERS
 
     public function getId(): int
     {
@@ -79,8 +82,12 @@ class OrderItem
         return $this->updatedAt;
     }
 
-    // 🔹 SETTERS
+    public function getDiscount(): float
+    {
+        return $this->discount;
+    }
 
+    // SETTERS
     public function setOrder(?Order $order): static
     {
         $this->order = $order;
@@ -114,6 +121,11 @@ class OrderItem
     public function setUpdatedAt(DateTime $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+        return $this;
+    }
+    public function setDiscount(float $discount): self
+    {
+        $this->discount = $discount;
         return $this;
     }
 }
