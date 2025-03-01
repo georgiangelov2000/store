@@ -153,7 +153,7 @@ $(function(){
             cancelButtonText: "Cancel"
         }).then((result) => {
             if (result.isConfirmed) {
-                confirmDeleteOrder(orderId);
+                deleteOrder(orderId);
             }
         });
     }
@@ -189,7 +189,7 @@ $(function(){
 
 
         console.log(itemsInput);
-        fetch("/api/v1/orders/create", {
+        fetch("/api/v1/orders", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ items: itemsInput })
