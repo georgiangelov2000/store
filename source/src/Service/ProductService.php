@@ -6,6 +6,14 @@ use App\Builders\API\ProductBuilder;
 use App\Entity\Product;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * Class ProductService
+ *
+ * This service is responsible for retrieving and processing product-related data, 
+ * including support for searching, pagination, and formatting.
+ *
+ * @package App\Service
+ */
 class ProductService
 {
     private EntityManagerInterface $entityManager;

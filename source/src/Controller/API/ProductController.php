@@ -7,6 +7,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class ProductController
+ *
+ * This controller handles API endpoints related to product data. Its main functionality
+ * is to return product lists with support for pagination, filtering, and searching.
+ *
+ * @package App\Controller\API
+ */
+
 class ProductController extends AbstractController
 {
 
@@ -16,6 +25,15 @@ class ProductController extends AbstractController
     {
         $this->productService = $productService;
     }
+
+    /**
+     * Returns a list of products as a JSON response, supporting pagination and search functionality.
+     *
+     * @param Request $request The HTTP request object containing query parameters for offset, limit, and search.
+     * @param ProductService $productService The service used for retrieving product data.
+     *
+     * @return JsonResponse The formatted response for the DataTables API, including product data, total count, and filtered count.
+     */
     public function listProducts(Request $request, ProductService $productService): JsonResponse
     {
         $offset = (int) $request->query->get('start', 0);
