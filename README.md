@@ -163,3 +163,43 @@ products:
     path: /products
     controller: App\Controller\ProductController::index
 ```
+
+
+## 7. Project Structure
+
+### `src/Builders/API/`
+Contains builders for constructing API-related data:
+- `BaseBuilder.php` – Base builder class.
+- `OrderBuilder.php` – Builds order-related data.
+- `ProductBuilder.php` – Builds product-related data.
+
+### `src/Controller/`
+Handles HTTP requests:
+- `HomeController.php` – Manages the home page.
+- `ProductController.php` – Handles product-related views.
+
+### `src/Controller/API/`
+Manages API endpoints:
+- `OrderController.php` – Handles order-related API operations.
+- `ProductController.php` – Handles product-related API operations.
+
+### `src/DataFixtures/`
+Contains seed data for testing:
+- `ProductFixtures.php` – Seeds the database with product data.
+
+### `src/Entity/`
+Defines database entities:
+- `Order.php` – Represents orders.
+- `OrderItem.php` – Represents items within an order.
+- `Product.php` – Represents products.
+
+### `src/Repository/`
+Handles database queries:
+- `OrderRepository.php` – Fetches order data.
+- `ProductRepository.php` – Fetches product data.
+
+### `src/Requests/`
+Defines request validation rules:
+- `CreateOrderRequest.php` – Validates order creation.
+- `GetOrderRequest.php` – Validates order retrieval.
+- `UpdateOrderStatusRequest.php` – Validates order status updates.
