@@ -203,3 +203,10 @@ Defines request validation rules:
 - `CreateOrderRequest.php` – Validates order creation.
 - `GetOrderRequest.php` – Validates order retrieval.
 - `UpdateOrderStatusRequest.php` – Validates order status updates.
+
+### `src/Service/`
+Handles business logic:
+- `BaseService.php` – Base service class.
+- `CheckoutService.php` – Handles checkout processes.
+- `OrderService.php` – Manages order-related operations.
+- `ProductService.php` – Handles product-related logic.
