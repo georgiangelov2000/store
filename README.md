@@ -114,3 +114,52 @@ public const STATUS_CANCELED = 3;
 | updated_at       | datetime      | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
 +------------------+---------------+------+-----+-------------------+-------------------+
 ```
+
+## 6. API Routes
+
+The application exposes the following API endpoints:
+
+```yaml
+api_order_create:
+    path: /api/v1/orders/create
+    controller: App\Controller\API\OrderController::createOrder
+    methods: [POST]
+
+api_order_get:
+    path: /api/v1/orders/{id}
+    controller: App\Controller\API\OrderController::getOrder
+    methods: [GET]
+
+api_order_list:
+    path: /api/v1/orders
+    controller: App\Controller\API\OrderController::getOrders
+    methods: [GET]
+
+api_order_items_list:
+    path: /api/v1/orders/{id}/items
+    controller: App\Controller\API\OrderController::getItems
+    methods: [GET]
+
+api_order_update_status:
+    path: /api/v1/orders/{id}/update-status
+    controller: App\Controller\API\OrderController::updateOrderStatus
+    methods: [PUT]
+
+api_order_delete:
+    path: /api/v1/orders/{id}/delete
+    controller: App\Controller\API\OrderController::deleteOrder
+    methods: [DELETE]
+
+api_product_list:
+    path: /api/v1/products
+    controller: App\Controller\API\ProductController::listProducts
+    methods: [GET]
+
+home:
+    path: /
+    controller: App\Controller\HomeController::index
+
+products:
+    path: /products
+    controller: App\Controller\ProductController::index
+```
