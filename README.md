@@ -92,6 +92,12 @@ Here is the database structure used in this project:
 | updated_at  | datetime      | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
 +-------------+---------------+------+-----+-------------------+-------------------+
 ```
+**Order Statuses:**
+```php
+public const STATUS_CREATED = 1;
+public const STATUS_COMPLETED = 2;
+public const STATUS_CANCELED = 3;
+```
 
 ### `products` Table
 ```plaintext
