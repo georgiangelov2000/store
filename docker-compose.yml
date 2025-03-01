@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  webserver:
+    image: nginx:latest
+    container_name: nginx_server
+    volumes:
+      - ./src:/var/www/store
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "127.0.0.1:8000:80"
+    depends_on:
+      - app
+    networks:
+      - symphony
+    restart: always
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: php
+    working_dir: /var/www/store
+    volumes:
+      - ./src:/var/www/store:delegated
+    networks:
+      - symphony
+    healthcheck:
+      test: [ "CMD", "php", "-v" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  db:
+    image: mysql:latest
+    container_name: mysql_db
+    restart: always
+    volumes:
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+      - db_data:/var/lib/mysql
+    env_file:
+      - ./mysql/.env
+    networks:
+      - symphony
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  db_data:
+
+networks:
+  symphony:
+    driver: bridge
