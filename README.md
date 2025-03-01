@@ -227,20 +227,6 @@ products:
 }
 ```
 
-### 6.2. Get Orders
-*   **Method:** `GET`
-*   **Path:** `/api/v1/orders`
-*   **Response:**
-```json
-[
-    {
-        "order_id": 1,
-        "status": "completed",
-        "total_price": 200.00
-    }
-]
-```
-
 ### 6.3. Get Order by ID
 *   **Method:** `GET`
 *   **Path:** `/api/v1/orders/{id}`
@@ -265,8 +251,8 @@ products:
             "product": "Product A",
             "sku": "A",
             "quantity": 4,
-            "price": 180,
-            "discount_price": 0
+            "price": 180.00,
+            "discount_price": 20.00
         }
     ]
 }
@@ -297,21 +283,6 @@ products:
 {
     "message": "Order deleted successfully."
 }
-```
-
-### 6.7. List Products
-*   **Method:** `GET`
-*   **Path:** `/api/v1/products`
-*   **Response:**
-```json
-[
-    {
-        "product_id": 1,
-        "name": "Product A",
-        "sku": "A",
-        "unit_price": 50.00
-    }
-]
 ```
 
 ## 7. Project Structure
