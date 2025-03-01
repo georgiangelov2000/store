@@ -36,12 +36,12 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Copy application source code
 COPY source/ .  
-COPY docker/setup.sh ./docker/setup.sh
 
-RUN chmod +x ./docker/setup.sh
+# Install project dependencies
+RUN composer install --no-interaction --optimize-autoloader
+
+# Set entrypoint
+ENTRYPOINT ["sh", "/var/www/store/setup.sh"]
 
 # Expose PHP-FPM port
 EXPOSE 9000
-
-# Default command to run PHP-FPM
-CMD ["php-fpm"]
