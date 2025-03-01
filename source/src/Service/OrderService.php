@@ -8,6 +8,15 @@ use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\BaseService;
 
+/**
+ * Class OrderService
+ *
+ * This service handles operations related to orders, such as retrieving orders with filters,
+ * retrieving order details, and related functionality.
+ *
+ * @package App\Service
+ */
+
 class OrderService extends BaseService
 {
 
@@ -20,10 +29,17 @@ class OrderService extends BaseService
         $this->orderRepository = $orderRepository;
     }
 
+    /**
+     * Retrieves a list of orders based on the provided filters, including pagination and sorting.
+     *
+     * @param array $filters An array of filters (e.g., status, date range).
+     *
+     * @return array Contains `totalOrders`, `filteredOrders`, and `data` (the list of filtered orders).
+     */
     public function getData(array $filters): array
     {
         $orderBuilder = new OrderBuilder($this->entityManager, $filters);
-        $queryBuilder = $orderBuilder->applySorting()->applyPagination()->getQueryBuilder();
+        $queryBuilder = $orderBuilder->applyFilters()->applySorting()->applyPagination()->getQueryBuilder();
         $orders = $queryBuilder->getQuery()->getResult();
 
         $totalOrders = $this->entityManager->getRepository(Order::class)->count([]);
@@ -38,6 +54,16 @@ class OrderService extends BaseService
             ], $orders)
         ];
     }
+
+    /**
+     * Retrieves the items for a given order by its ID.
+     *
+     * @param int $orderId The ID of the order.
+     *
+     * @return array An array containing the order item details.
+     *
+     * @throws \Exception If the order does not exist.
+     */
     public function getOrderItems(int $orderId): array
     {
         $order = $this->orderRepository->find($orderId);

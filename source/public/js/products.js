@@ -6,33 +6,41 @@ $(function () {
             data: function (d) {
                 return $.extend({}, d, {
                     "search": d.search.value,
-                    "limit": d.length
+                    "limit": d.length,
+                    "order_column": d.order[0].column,
+                    "order_dir": d.order[0].dir
                 });
             }
         },
         columns: [
             {
                 "data": "id",
-                "orderable": false,
+                "name" : "id",
+                "orderable": true,
                 "render": function (data) {
                     return `<strong>#${data}</strong>`;
                 }
             },
             {
                 "data": "name",
+                "name": "name",
                 "orderable": false
             },
             {
                 "data": "sku",
+                "name": "sku",
                 "orderable": false
             },
             {
-                "data": "price",
+                "data": "unitPrice",
+                "name": "unitPrice",
                 "orderable": true,
-                "render": function (data) {
-                    return `$${parseFloat(data).toFixed(2)}`;
+                "render": function (data,type,row) {
+                    console.log(row.unitPrice);
+                    return `$${parseFloat(row.unitPrice).toFixed(2)}`;
                 }
             }
-        ]
+        ],
+        order: [[0, "asc"]],
     });
 });

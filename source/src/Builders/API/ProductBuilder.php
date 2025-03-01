@@ -2,37 +2,38 @@
 
 namespace App\Builders\API;
 
+use App\Entity\Product;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\QueryBuilder;
 
-class ProductBuilder
+class ProductBuilder extends BaseBuilder
 {
-    private QueryBuilder $queryBuilder;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, array $filters = [])
     {
-        $this->queryBuilder = $entityManager->createQueryBuilder()
-            ->select('p')
-            ->from('App\Entity\Product', 'p');
+        parent::__construct($entityManager, Product::class, 'o', $filters);
+
     }
 
-    public function applySearch(string $search): self
+    /**
+     * Apply filters dynamically based on stored properties.
+     *
+     * @return self
+     */
+    public function applyFilters(): self
     {
-        if (!empty($search)) {
-            $this->queryBuilder->andWhere('p.name LIKE :search OR p.sku LIKE :search')
-                ->setParameter('search', "%$search%");
+        // ID Filter
+        if (isset($this->filters['id'])) {
+            $this->queryBuilder->andWhere("{$this->alias}.id IN (:ids)")
+                ->setParameter('ids', explode(',', $this->filters['id']));
+        }
+        // Search Filter (Match Entity Field Names including SKU)
+        if (isset($this->filters['search'])) {
+            $searchTerm = '%' . $this->filters['search'] . '%';
+            $this->queryBuilder->andWhere("{$this->alias}.name LIKE :search 
+                                            OR {$this->alias}.id LIKE :search 
+                                            OR {$this->alias}.sku LIKE :search")
+                ->setParameter('search', $searchTerm);
         }
         return $this;
-    }
-
-    public function applyPagination(int $offset, int $limit): self
-    {
-        $this->queryBuilder->setFirstResult($offset)->setMaxResults($limit);
-        return $this;
-    }
-
-    public function getQueryBuilder(): QueryBuilder
-    {
-        return $this->queryBuilder;
     }
 }

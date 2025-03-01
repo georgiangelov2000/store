@@ -2,8 +2,10 @@
 
 namespace App\Controller\API;
 
+use App\Requests\GetProductRequest;
 use App\Service\ProductService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -34,19 +36,16 @@ class ProductController extends AbstractController
      *
      * @return JsonResponse The formatted response for the DataTables API, including product data, total count, and filtered count.
      */
-    public function listProducts(Request $request, ProductService $productService): JsonResponse
+    public function getProducts(Request $request): JsonResponse
     {
-        $offset = (int) $request->query->get('start', 0);
-        $limit = (int) $request->query->get('length', 10);
-        $search = $request->query->get('search', '');
-    
-        $data = $productService->getData($offset, $limit, $search);
-    
+        $filters = (new GetProductRequest($request))->getFilters();
+        $result = $this->productService->getData($filters);
+
         return $this->json([
             "draw" => $request->query->get('draw', 1),
-            "recordsTotal" => $data["totalProducts"],
-            "recordsFiltered" => $data["filteredProducts"],
-            "data" => $data["data"]
+            "recordsTotal" => $result["totalProducts"],
+            "recordsFiltered" => $result["filteredProducts"],
+            "data" => $result["data"]
         ],200);
     }
     

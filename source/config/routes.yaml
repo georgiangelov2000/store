@@ -26,7 +26,7 @@ api_order_delete:
 
 api_product_list:
     path: /api/v1/products
-    controller: App\Controller\API\ProductController::listProducts
+    controller: App\Controller\API\ProductController::getProducts
     methods: [GET]
 
 home:

@@ -176,19 +176,19 @@ class OrderController extends AbstractController
             return $this->json(['error' => 'Order not found'], 404);
         }
 
-        $this->entityManager->beginTransaction(); // 🔹 Start transaction
+        $this->entityManager->beginTransaction(); // Start transaction
 
         try {
             $this->entityManager->remove($order);
             $this->entityManager->flush();
-            $this->entityManager->commit(); // 🔹 Commit transaction
+            $this->entityManager->commit(); // Commit transaction
 
             return $this->json([
                 'message' => 'Order deleted successfully',
                 'order_id' => $id
             ], 200);
         } catch (\Exception $e) {
-            $this->entityManager->rollback(); // 🔹 Rollback transaction if error
+            $this->entityManager->rollback(); // Rollback transaction if error
             return $this->json(['error' => 'Failed to delete order: ' . $e->getMessage()], 400);
         }
     }

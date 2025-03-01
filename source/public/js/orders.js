@@ -7,7 +7,7 @@ $(function(){
                 return $.extend({}, d, {
                     "search": d.search.value,
                     "limit": d.length,
-                    "order_column": d.order[0].column, //  Apply sorting
+                    "order_column": d.order[0].column,
                     "order_dir": d.order[0].dir
                 });
             }

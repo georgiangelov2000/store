@@ -23,29 +23,26 @@ class ProductService
         $this->entityManager = $entityManager;
     }
 
-    public function getData(int $offset, int $limit, string $search): array
+    /**
+     * Retrieves products based on filters, pagination, and sorting.
+     *
+     * @param array $filters Filters for querying products.
+     *
+     * @return array Returns total products, filtered products count, and product data.
+     */
+
+    public function getData(array $filters): array
     {
-        $productBuilder = new ProductBuilder($this->entityManager);
-        $queryBuilder = $productBuilder
-            ->applySearch($search)
-            ->applyPagination($offset, $limit)
-            ->getQueryBuilder();
-
+        $productBuilder = new ProductBuilder($this->entityManager , $filters);
+        $queryBuilder = $productBuilder->applyFilters()->applySorting()->applyPagination()->getQueryBuilder();
         $products = $queryBuilder->getQuery()->getResult();
-        $totalProducts = $this->entityManager->getRepository(Product::class)->count([]);
 
-        // 🔹 Format data
-        $data = array_map(fn($product) => [
-            'id' => $product->getId(),
-            'name' => $product->getName(),
-            'sku' => $product->getSku(),
-            'price' => $product->getUnitPrice(),
-        ], $products);
+        $totalProducts = $this->entityManager->getRepository(Product::class)->count([]);
 
         return [
             "totalProducts" => $totalProducts,
             "filteredProducts" => count($products),
-            "data" => $data
+            "data" => $products, // Direct return of DTOs, no iteration
         ];
     }
 }
