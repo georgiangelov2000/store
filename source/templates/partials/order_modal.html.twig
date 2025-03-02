@@ -10,9 +10,13 @@
             <div class="modal-body">
                 <form id="createOrderForm">
                     <div class="mb-3">
-                        <label for="orderItems" class="form-label">Order Items (SKU)</label>
-                        <textarea class="form-control" id="orderItems" placeholder="Example: AB"></textarea>
+                    <label for="orderItems" class="form-label">
+                        Order Items (SKU),
+                        <small class="text-muted">Available SKUs: <strong class="text-primary">A, B, C, D</strong></small>
+                    </label>
+                    <textarea class="form-control" id="orderItems" placeholder="Example: AB"></textarea>
                     </div>
+                    <span class="text-danger json-errors d-block mb-3"></span>
                     <button type="submit" class="btn btn-primary">Create Order</button>
                 </form>
             </div>

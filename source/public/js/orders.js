@@ -60,7 +60,6 @@ $(function(){
                 "width": "27%",
                 "render": function (data, type, row) {
                     let buttons = '';
-                    console.log(row.status);
                     if (row.status !== 1) {
                         buttons += `<button class="mr-2 btn btn-sm shadow-sm btn-primary" onclick="confirmUpdateStatus(${row.id}, 1)">
                                         Update to Created
@@ -228,6 +227,7 @@ $(function(){
         e.preventDefault();
         
         let itemsInput = $("#orderItems").val().trim();
+        let errorContainer = $(".json-errors");
         if (!itemsInput) {
             Swal.fire("Error!", "Please enter order items.", "error");
             return;
@@ -245,12 +245,16 @@ $(function(){
                 Swal.fire("Success!", "Order created successfully!", "success");
                 $("#createOrderForm")[0].reset(); 
                 $('#createOrderModal').modal('hide');
-                $('.table').DataTable().ajax.reload(null,false);
+                $('.table').DataTable().ajax.reload(null, false);
+            } else if (data.errors && Array.isArray(data.errors)) {
+                errorContainer.html(`${data.errors[0]}`).show();
             } else {
                 Swal.fire("Error!", data.error || "Failed to create order.", "error");
             }
         })
         .catch(error => {
+            console.log('error');
+            errorContainer.html(`${data.errors[0]}`).show();
             Swal.fire("Error!", "Something went wrong.", "error");
             console.error("Error:", error);
         });
