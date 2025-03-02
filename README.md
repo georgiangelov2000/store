@@ -120,6 +120,7 @@ Here is the database structure used in this project:
 | price      | decimal(10,2) | NO   |     | NULL              |                   |
 | created_at | datetime      | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
 | updated_at | datetime      | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
+| discount   | decimal(10,2) | NO   |     | 0.00              | DEFAULT_GENERATED |
 +------------+---------------+------+-----+-------------------+-------------------+
 ```
 
