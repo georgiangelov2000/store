@@ -23,14 +23,22 @@ $(function(){
             {
                 "data": "id",
                 "name" : "id",
+                "width": "1%",
                 "orderable": true,
                 "render": function (data) {
                     return `<strong>#${data}</strong>`;
                 }
             },
             {
+                "data": "groups",
+                "name" : "groups",
+                "width": "10%",
+                "orderable": false
+            },
+            {
                 "data": "status",
                 "orderable": false,
+                "width": "1%",
                 "render": function (data) {
                     let statusText = status[data] || "Unknown"; // Get status name
                     let statusClass = (data === 2) ? "success" : (data === 3) ? "danger" : "warning"; // Map status to a Bootstrap class
@@ -41,6 +49,7 @@ $(function(){
             {
                 "data": "total_price",
                 "orderable": true,
+                "width": "5%",
                 "render": function (data) {
                     return `$${parseFloat(data).toFixed(2)}`;
                 }
@@ -48,33 +57,34 @@ $(function(){
             {
                 "orderable": false,
                 "class": "text-center",
+                "width": "27%",
                 "render": function (data, type, row) {
                     let buttons = '';
                     console.log(row.status);
                     if (row.status !== 1) {
                         buttons += `<button class="mr-2 btn btn-sm shadow-sm btn-primary" onclick="confirmUpdateStatus(${row.id}, 1)">
-                                        <i class="fa-solid fa-plus"></i> Update to Created
+                                        Update to Created
                                     </button>`;
                     }
             
                     if (row.status !== 2) {
                         buttons += `<button class="mr-2 btn btn-sm shadow-sm btn-success" onclick="confirmUpdateStatus(${row.id}, 2)">
-                                        <i class="fa-solid fa-check"></i> Update to Completed
+                                        Update to Completed
                                     </button>`;
                     }
             
                     if (row.status !== 3) {
                         buttons += `<button class="mr-2 btn btn-sm shadow-sm btn-danger" onclick="confirmUpdateStatus(${row.id}, 3)">
-                                        <i class="fa-solid fa-ban"></i> Update to Canceled
+                                        Update to Canceled
                                     </button>`;
                     }
             
                     buttons += `<button class="mr-2 btn btn-sm shadow-sm btn-info" onclick="viewOrderItems(${row.id})">
-                                    <i class="fa-solid fa-magnifying-glass"></i> Order Items
+                                    Order Items
                                 </button>`;
             
                     buttons += `<button class="mr-2 btn btn-sm shadow-sm btn-warning" onclick="confirmDeleteOrder(${row.id})">
-                                    <i class="fa-solid fa-trash"></i> Delete
+                                    Delete
                                 </button>`;
             
                     return buttons;
@@ -224,7 +234,6 @@ $(function(){
         }
 
 
-        console.log(itemsInput);
         fetch("/api/v1/orders", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -234,6 +243,7 @@ $(function(){
         .then(data => {
             if (data.order_id) {
                 Swal.fire("Success!", "Order created successfully!", "success");
+                $("#createOrderForm")[0].reset(); 
                 $('#createOrderModal').modal('hide');
                 $('.table').DataTable().ajax.reload(null,false);
             } else {

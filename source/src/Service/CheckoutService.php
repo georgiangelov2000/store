@@ -102,11 +102,9 @@ class CheckoutService
     private function calculatePrice(float $unitPrice, ?int $specialQuantity, ?float $specialPrice, int $quantity): float
     {
         if ($specialQuantity && $specialPrice) {
-            $specialSetCount = intdiv($quantity, $specialQuantity);
-            $remaining = $quantity % $specialQuantity;
-            return ($specialSetCount * $specialPrice) + ($remaining * $unitPrice);
+            return $this->calculateDiscountedTotal($unitPrice, $specialQuantity, $specialPrice, $quantity);
         }
-        return $quantity * $unitPrice;
+        return $this->calculateRegularTotal($unitPrice, $quantity);
     }
 
     /**
@@ -122,14 +120,40 @@ class CheckoutService
     private function calculateDiscountPrice(float $unitPrice, ?int $specialQuantity, ?float $specialPrice, int $quantity): float
     {
         if ($specialQuantity && $specialPrice) {
-            $specialSetCount = intdiv($quantity, $specialQuantity);
-            $remaining = $quantity % $specialQuantity;
-
-            $normalPrice = ($specialSetCount * $specialQuantity * $unitPrice) + ($remaining * $unitPrice);
-            $discountedPrice = ($specialSetCount * $specialPrice) + ($remaining * $unitPrice);
-
+            $normalPrice = $this->calculateRegularTotal($unitPrice, $quantity);
+            $discountedPrice = $this->calculateDiscountedTotal($unitPrice, $specialQuantity, $specialPrice, $quantity);
             return $normalPrice - $discountedPrice; // Total discount
         }
         return 0; // No discount applied
+    }
+
+    /**
+     * Calculates the total price when applying special pricing rules.
+     *
+     * @param float $unitPrice The unit price of the product.
+     * @param int $specialQuantity The quantity required for the special price to apply.
+     * @param float $specialPrice The special price for the given quantity.
+     * @param int $quantity The quantity of the purchased product.
+     *
+     * @return float The total calculated price with special pricing applied.
+     */
+    private function calculateDiscountedTotal(float $unitPrice, int $specialQuantity, float $specialPrice, int $quantity): float
+    {
+        $specialSetCount = intdiv($quantity, $specialQuantity);
+        $remaining = $quantity % $specialQuantity;
+        return ($specialSetCount * $specialPrice) + ($remaining * $unitPrice);
+    }
+
+    /**
+     * Calculates the total price without applying special pricing rules.
+     *
+     * @param float $unitPrice The unit price of the product.
+     * @param int $quantity The quantity of the purchased product.
+     *
+     * @return float The total calculated price without discounts.
+     */
+    private function calculateRegularTotal(float $unitPrice, int $quantity): float
+    {
+        return $quantity * $unitPrice;
     }
 }

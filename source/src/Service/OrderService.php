@@ -50,8 +50,21 @@ class OrderService extends BaseService
                 'id' => $order->getId(),
                 'status' => $order->getStatus(),
                 'total_price' => $order->getTotalPrice(),
+                'groups' => $this->getOrderItemsAsString($order)
             ], $orders)
         ];
+    }
+
+    /**
+     * Converts order items into a comma-separated string.
+     *
+     * @param Order $order The order entity.
+     * @return string The formatted order items as "ProductName (xQuantity), ProductName (xQuantity)".
+     */
+    private function getOrderItemsAsString(Order $order): string
+    {
+        $items = $order->getItems()->map(fn($item) => "{$item->getProduct()->getName()} (x{$item->getQuantity()})")->toArray();
+        return implode(', ', $items);
     }
 
     /**
