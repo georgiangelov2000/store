@@ -16,7 +16,18 @@
                 Create Order
             </button>
         </div>
-
+        <div class="row mb-2">
+            <div class="col-2">
+                <label class="font-weight-bold" for="status">Status</label>
+                <select name="status" class="form-control form-control-sm">
+                    <option selected value="">All</option>
+                    {% for key, label in statuses %}
+                        <option value="{{ key }}">{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>    
+         <hr>
         <table class="table table-hover table-bordered align-middle">
             <thead class="table-dark">
                 <tr>

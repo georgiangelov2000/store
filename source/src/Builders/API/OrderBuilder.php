@@ -35,7 +35,7 @@ class OrderBuilder extends BaseBuilder
         }
 
         // Status Filter
-        if (isset($this->filters['status'])) {
+        if (isset($this->filters['status']) && !empty($this->filters['status'])) {
             $this->queryBuilder->andWhere("{$this->alias}.status IN (:status)")
                 ->setParameter('status', (array) $this->filters['status']);
         }

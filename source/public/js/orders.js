@@ -6,16 +6,23 @@ $(function(){
         3:"Canceled"
     };
     
+    let statusField = $("select[name='status']");
+
     let table = $(".table").DataTable({
+        processing: true,
         serverSide: true,
         ajax: {
             url: "/api/v1/orders",
             data: function (d) {
+                const orderColumnIndex = d.order[0].column;
+                const orderColumnName = d.columns[orderColumnIndex].name;
+                console.log(orderColumnName);
                 return $.extend({}, d, {
+                    "status": statusField.val(),
                     "search": d.search.value,
-                    "limit": d.length,
-                    "order_column": d.order[0].column,
-                    "order_dir": d.order[0].dir
+                    'order_column': orderColumnName,
+                    'order_dir': d.order[0].dir,
+                    'limit': d.custom_length = d.length,
                 });
             }
         },
@@ -48,6 +55,7 @@ $(function(){
             },            
             {
                 "data": "total_price",
+                "name": "totalPrice",
                 "orderable": true,
                 "width": "5%",
                 "render": function (data) {
@@ -60,39 +68,33 @@ $(function(){
                 "width": "27%",
                 "render": function (data, type, row) {
                     let buttons = '';
-                    if (row.status !== 1) {
-                        buttons += `<button class="mr-2 btn btn-sm shadow-sm btn-primary" onclick="confirmUpdateStatus(${row.id}, 1)">
-                                        Update to Created
-                                    </button>`;
-                    }
-            
-                    if (row.status !== 2) {
+
+                    if (row.status == 1) {
                         buttons += `<button class="mr-2 btn btn-sm shadow-sm btn-success" onclick="confirmUpdateStatus(${row.id}, 2)">
                                         Update to Completed
                                     </button>`;
-                    }
-            
-                    if (row.status !== 3) {
                         buttons += `<button class="mr-2 btn btn-sm shadow-sm btn-danger" onclick="confirmUpdateStatus(${row.id}, 3)">
                                         Update to Canceled
                                     </button>`;
+                        buttons += `<button class="mr-2 btn btn-sm shadow-sm btn-warning" onclick="confirmDeleteOrder(${row.id})">
+                                        Delete
+                                    </button>`;
+                    } else {
+                        buttons += `<span class="text-danger">The order is already finished. You can't change the status</span>`;
                     }
-            
-                    buttons += `<button class="mr-2 btn btn-sm shadow-sm btn-info" onclick="viewOrderItems(${row.id})">
-                                    Order Items
-                                </button>`;
-            
-                    buttons += `<button class="mr-2 btn btn-sm shadow-sm btn-warning" onclick="confirmDeleteOrder(${row.id})">
-                                    Delete
-                                </button>`;
             
                     return buttons;
                 }
             }            
         ],
+        pageLength: 10,
         order: [[0, "asc"]],
     });
-    
+
+    statusField.on('change', function () {
+        $('.table').DataTable().ajax.reload(null,false)
+    });
+
     /**
      * Confirm status update with SweetAlert
      */
@@ -123,7 +125,7 @@ $(function(){
         .then(response => response.json())
         .then(data => {
             Swal.fire("Updated!", data.message || "Order status updated.", "success");
-            $('.table').DataTable().ajax.reload();
+            $('.table').DataTable().ajax.reload(null,false);
         })
         .catch(error => {
             Swal.fire("Error!", "Something went wrong.", "error");
@@ -214,7 +216,7 @@ $(function(){
         .then(response => response.json())
         .then(data => {
             Swal.fire("Deleted!", data.message || "Order has been deleted.", "success");
-            $('.table').DataTable().ajax.reload();
+            $('.table').DataTable().ajax.reload(null,false);
         })
         .catch(error => {
             Swal.fire("Error!", "Could not delete order.", "error");

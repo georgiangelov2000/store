@@ -38,6 +38,7 @@ class ProductController extends AbstractController
      */
     public function getProducts(Request $request): JsonResponse
     {
+        // Apply filters and sorting from request parameters, then retrieve product data
         $filters = (new GetProductRequest($request))->getFilters();
         $result = $this->productService->getData($filters);
 

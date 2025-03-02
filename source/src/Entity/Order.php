@@ -131,20 +131,29 @@ class Order
         return $this;
     }
 
+    public static function getAllStatuses(): array
+    {
+        return [
+            self::STATUS_CREATED => "Created",
+            self::STATUS_COMPLETED => "Completed",
+            self::STATUS_CANCELED => "Canceled",
+        ];
+    }
+
     public function updateStatus(int $newStatus): static
-{
-    if ($this->status !== self::STATUS_CREATED) {
-        throw new \Exception("Order status can only be updated from 'created'.");
+    {
+        if ($this->status !== self::STATUS_CREATED) {
+            throw new \Exception("Order status can only be updated from 'created'.");
+        }
+
+        if (!in_array($newStatus, [self::STATUS_COMPLETED, self::STATUS_CANCELED])) {
+            throw new \Exception("Invalid status. Order can only be 'completed' or 'canceled'.");
+        }
+
+        $this->status = $newStatus;
+        $this->updatedAt = new DateTime();
+
+        return $this;
     }
-
-    if (!in_array($newStatus, [self::STATUS_COMPLETED, self::STATUS_CANCELED])) {
-        throw new \Exception("Invalid status. Order can only be 'completed' or 'canceled'.");
-    }
-
-    $this->status = $newStatus;
-    $this->updatedAt = new DateTime();
-
-    return $this;
-}
 
 }

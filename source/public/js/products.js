@@ -1,14 +1,18 @@
 $(function () {
     let table = $(".table").DataTable({
+        processing: true,
         serverSide: true,
         ajax: {
             url: "/api/v1/products",
             data: function (d) {
+                const orderColumnIndex = d.order[0].column;
+                const orderColumnName = d.columns[orderColumnIndex].name;
+                console.log(orderColumnName);
                 return $.extend({}, d, {
                     "search": d.search.value,
-                    "limit": d.length,
-                    "order_column": d.order[0].column,
-                    "order_dir": d.order[0].dir
+                    'order_column': orderColumnName,
+                    'order_dir': d.order[0].dir,
+                    'limit': d.custom_length = d.length,
                 });
             }
         },
@@ -41,6 +45,7 @@ $(function () {
                 }
             }
         ],
+        pageLength: 10,
         order: [[0, "asc"]],
     });
 });
