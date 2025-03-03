@@ -105,7 +105,7 @@ cat mysql/.env
 ```
 
 ### `Execute PHP Unit command
-```sh`
+```sh
 docker exec php php bin/phpunit tests/Controller/OrderControllerTest.php
 ```
 
