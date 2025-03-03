@@ -337,7 +337,7 @@ Handles business logic:
 - `OrderService.php` – Manages order-related operations.
 - `ProductService.php` – Handles product-related logic.
 
-### `src/Builders/tests/`
+### `src/tests/Controller`
 Contains builders for constructing API-related data:
 - `OrderControllerTest.php` – Functional tests for OrderController. Ensures order creation, validation, and error handling work correctly.
 
