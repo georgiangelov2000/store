@@ -331,3 +331,8 @@ Handles business logic:
 - `CheckoutService.php` – Handles checkout processes.
 - `OrderService.php` – Manages order-related operations.
 - `ProductService.php` – Handles product-related logic.
+
+### `src/Builders/tests/`
+Contains builders for constructing API-related data:
+- `OrderControllerTest.php` – Functional tests for OrderController. Ensures order creation, validation, and error handling work correctly.
+
