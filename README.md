@@ -103,8 +103,11 @@ The `.env` file containing MySQL credentials is **tracked in Git** for this tech
 ```sh
 cat mysql/.env
 ```
-### `Execute PHP Unit command`
+
+### `Execute PHP Unit command
+```sh`
 docker exec php php bin/phpunit tests/Controller/OrderControllerTest.php
+```
 
 ## 3. Database Diagram
 
