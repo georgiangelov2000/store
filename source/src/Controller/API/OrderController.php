@@ -43,7 +43,7 @@ class OrderController extends AbstractController
         $data = json_decode($request->getContent(), true);
         
         // Handle case where the request body is empty or invalid JSON
-        if ($data === null || is_array($data)) {
+        if ($data === null || is_array($data['items'])) {
             return $this->json(['errors' => 'Invalid JSON format. Expected a JSON object with "items".'], 400);
         }
 

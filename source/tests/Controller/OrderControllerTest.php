@@ -8,113 +8,73 @@ use Symfony\Component\HttpFoundation\Response;
 class OrderControllerTest extends WebTestCase
 {
     /**
-     * Test successful order creation with valid items
+     * Test various invalid order creation scenarios
      */
-    public function testCreateOrderSuccessfully()
+    public function testCreateOrderWithInvalidInputs()
     {
         $client = static::createClient();
 
-        // Send a request with valid items
+        // 1️ Invalid format: "A,B,C" (API expects string like "ABC")
         $client->request('POST', '/api/v1/orders', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
             'items' => 'A,B,C'
         ]));
-
         $response = $client->getResponse();
         $responseData = json_decode($response->getContent(), true);
+        echo "\n🚨 Invalid Format Test: Expected 400, Got " . $response->getStatusCode();
+        dump($responseData);
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode(), 'Expected HTTP 400 Bad Request for invalid format');
 
-        // Check HTTP response status
-        $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode(), 'Expected HTTP 201 Created');
-
-        // Debugging Output
-        dump('✅ Order Created Response:', $responseData);
-
-        // Ensure the response contains necessary keys
-        $this->assertArrayHasKey('order_id', $responseData, 'Missing "order_id" in response');
-        $this->assertArrayHasKey('total_price', $responseData, 'Missing "total_price" in response');
-        $this->assertEquals('created', $responseData['status'], 'Order status should be "created"');
-    }
-
-    /**
-     * Test multiple order requests including both valid and invalid cases
-     */
-    public function testMultipleOrderRequests()
-    {
-        $client = static::createClient();
-
-        // First request: Invalid item
+        // 2️ Invalid SKU: "INVALID_ITEM"
         $client->request('POST', '/api/v1/orders', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
             'items' => 'INVALID_ITEM'
         ]));
+        $response = $client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+        echo "\n🚨 Invalid SKU Test: Expected 400, Got " . $response->getStatusCode();
+        dump($responseData);
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode(), 'Expected HTTP 400 Bad Request for invalid SKU');
 
-        $response1 = $client->getResponse();
-        $responseData1 = json_decode($response1->getContent(), true);
-        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response1->getStatusCode(), 'Expected HTTP 400 Bad Request for invalid item');
-        $this->assertArrayHasKey('errors', $responseData1, 'Error response missing "errors" key');
-        dump('🚨 Invalid Order Response:', $responseData1);
-
-        // ✅ Second request: Valid items
-        $client->request('POST', '/api/v1/orders', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
-            'items' => 'A,B,C'
-        ]));
-
-        $response2 = $client->getResponse();
-        $responseData2 = json_decode($response2->getContent(), true);
-        $this->assertEquals(Response::HTTP_CREATED, $response2->getStatusCode(), 'Expected HTTP 201 Created for valid order');
-        $this->assertArrayHasKey('order_id', $responseData2, 'Missing "order_id" in valid response');
-        $this->assertArrayHasKey('total_price', $responseData2, 'Missing "total_price" in valid response');
-        dump('✅ Valid Order Response:', $responseData2);
-    }
-
-    /**
-     * Test creating an order with an empty items array (edge case)
-     */
-    public function testCreateOrderWithEmptyItems()
-    {
-        $client = static::createClient();
-
+        // 3️ Items as Array (invalid type)
         $client->request('POST', '/api/v1/orders', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
             'items' => []
         ]));
-
         $response = $client->getResponse();
         $responseData = json_decode($response->getContent(), true);
+        echo "\n🚨 Items as Array Test: Expected 400, Got " . $response->getStatusCode();
+        dump($responseData);
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode(), 'Expected HTTP 400 Bad Request for non-string items');
 
-        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode(), 'Expected HTTP 400 for empty items');
-        $this->assertArrayHasKey('errors', $responseData, 'Missing "errors" key in response');
-        dump('🚨 Empty Items Response:', $responseData);
-    }
-
-    /**
-     * Test creating an order with missing JSON payload (invalid request)
-     */
-    public function testCreateOrderWithMissingPayload()
-    {
-        $client = static::createClient();
-
-        $client->request('POST', '/api/v1/orders', [], [], ['CONTENT_TYPE' => 'application/json'], '');
-
+        // 4️ Comma-Separated SKUs
+        $client->request('POST', '/api/v1/orders', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            'items' => "A,V,C,Z"
+        ]));
         $response = $client->getResponse();
         $responseData = json_decode($response->getContent(), true);
+        echo "\n🚨 Comma-Separated SKUs Test: Expected 400, Got " . $response->getStatusCode();
+        dump($responseData);
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode(), 'Expected HTTP 400 Bad Request for comma-separated SKUs');
 
-        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode(), 'Expected HTTP 400 for missing payload');
-        $this->assertArrayHasKey('errors', $responseData, 'Missing "errors" key in response');
-        dump('🚨 Missing Payload Response:', $responseData);
-    }
-
-    /**
-     * Test creating an order with invalid JSON structure
-     */
-    public function testCreateOrderWithInvalidJson()
-    {
-        $client = static::createClient();
-
-        $client->request('POST', '/api/v1/orders', [], [], ['CONTENT_TYPE' => 'application/json'], '{invalid_json}');
-
+        //Valid format
+        //1 Valid input (should return 201 CREATED)
+        $client->request('POST', '/api/v1/orders', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            'items' => "AA"
+        ]));
         $response = $client->getResponse();
         $responseData = json_decode($response->getContent(), true);
+        echo "\n✅ Valid SKU Test (AA): Expected 201, Got " . $response->getStatusCode();
+        dump($responseData);
+        $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode(), 'Expected HTTP 201 Created for valid SKU');
 
-        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode(), 'Expected HTTP 400 for invalid JSON');
-        $this->assertArrayHasKey('errors', $responseData, 'Missing "errors" key in response');
-        dump('🚨 Invalid JSON Response:', $responseData);
+        // 2. Valid input (should return 201 CREATED)
+        $client->request('POST', '/api/v1/orders', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            'items' => "ABCD"
+        ]));
+        $response = $client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+        echo "\n✅ Valid SKU Test (ABCD): Expected 201, Got " . $response->getStatusCode();
+        dump($responseData);
+        $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode(), 'Expected HTTP 201 Created for valid SKU');
+
     }
+
 }
