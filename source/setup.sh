@@ -1,19 +1,13 @@
 #!/bin/sh
-set -e  # Exit on error
+set -e  # Exit script on any error
 
 echo "Starting setup script..."
 
-# Check for pending migrations
-PENDING_MIGRATIONS=$(php bin/console doctrine:migrations:status | grep "New Migrations" | awk '{print $3}')
-
-if [ "$PENDING_MIGRATIONS" -gt 0 ]; then
-    echo "Running migrations..."
-    php bin/console doctrine:migrations:migrate --no-interaction
-    php bin/console doctrine:fixtures:load --no-interaction
-
-    echo "Migrations executed successfully!"
+if [ ! -d "vendor" ]; then
+    composer install
 else
-    echo "No new migrations to run."
+    echo "Dependencies already installed, skipping..."
 fi
 
+# Start PHP-FPM
 exec php-fpm

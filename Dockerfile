@@ -37,9 +37,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Copy application source code
 COPY source/ .  
 
-# Install project dependencies
-RUN composer install --no-interaction --optimize-autoloader
-
 # Set entrypoint
 ENTRYPOINT ["sh", "/var/www/store/setup.sh"]
 

@@ -67,22 +67,29 @@ $(function(){
                 "class": "text-center",
                 "width": "27%",
                 "render": function (data, type, row) {
-                    let buttons = '';
-
-                    if (row.status == 1) {
-                        buttons += `<button class="mr-2 btn btn-sm shadow-sm btn-success" onclick="confirmUpdateStatus(${row.id}, 2)">
-                                        Update to Completed
-                                    </button>`;
-                        buttons += `<button class="mr-2 btn btn-sm shadow-sm btn-danger" onclick="confirmUpdateStatus(${row.id}, 3)">
-                                        Update to Canceled
-                                    </button>`;
-                        buttons += `<button class="mr-2 btn btn-sm shadow-sm btn-warning" onclick="confirmDeleteOrder(${row.id})">
-                                        Delete
-                                    </button>`;
+                        let buttons = `
+                        <button class="btn btn-sm shadow-sm btn-info mr-2" onclick="viewOrderItems(${row.id})">
+                            <i class="fa-solid fa-magnifying-glass"></i> Order Items
+                        </button>`;
+                    
+                    if (row.status === 1) {
+                        buttons += `
+                            <button class="mr-2 btn btn-sm shadow-sm btn-success" onclick="confirmUpdateStatus(${row.id}, 2)">
+                                Update to Completed
+                            </button>
+                            <button class="mr-2 btn btn-sm shadow-sm btn-danger" onclick="confirmUpdateStatus(${row.id}, 3)">
+                                Update to Canceled
+                            </button>
+                            <button class="mr-2 btn btn-sm shadow-sm btn-warning" onclick="confirmDeleteOrder(${row.id})">
+                                Delete
+                            </button>`;
                     } else {
-                        buttons += `<span class="text-danger">The order is already finished. You can't change the status</span>`;
+                        buttons += `
+                            <span class="text-danger font-weight-bold">
+                                The order is already finished. You can't change the status
+                            </span>`;
                     }
-            
+                    
                     return buttons;
                 }
             }            

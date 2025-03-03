@@ -8,6 +8,7 @@ services:
     volumes:
       - ./mysql/my.cnf:/etc/mysql/my.cnf
       - db_data:/var/lib/mysql
+      - ./init-scripts:/docker-entrypoint-initdb.d
     env_file:
       - ./mysql/.env
     networks:
@@ -19,6 +20,7 @@ services:
       retries: 5
       start_period: 30s
 
+
   app:
     build:
       context: .
@@ -29,7 +31,7 @@ services:
       - ./source:/var/www/store:delegated
     depends_on:
       db:
-        condition: service_healthy  # Waits for MySQL before starting
+        condition: service_healthy
     networks:
       - symphony
     healthcheck:
