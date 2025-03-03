@@ -110,6 +110,7 @@ docker exec php php bin/phpunit tests/Controller/OrderControllerTest.php
 ```
 
 ## 3. Database Diagram
+![db_diagram2](https://github.com/user-attachments/assets/8ce7a159-5ce7-45b3-acf9-a3511efa6122)
 
 Here is the database structure used in this project:
 
