@@ -41,6 +41,12 @@ class OrderController extends AbstractController
     public function createOrder(Request $request, ValidatorInterface $validator): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
+        
+        // Handle case where the request body is empty or invalid JSON
+        if ($data === null || is_array($data)) {
+            return $this->json(['errors' => 'Invalid JSON format. Expected a JSON object with "items".'], 400);
+        }
+
         $requestDto = new CreateOrderRequest($data);
 
         $errors = $requestDto->validate($validator);
