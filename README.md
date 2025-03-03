@@ -230,7 +230,7 @@ products:
 {
     "order_id": 1,
     "status": "created",
-    "total_price": 200.00
+    "total_price": 180.00
 }
 ```
 
@@ -242,7 +242,7 @@ products:
 {
     "order_id": 1,
     "status": "completed",
-    "total_price": 200.00
+    "total_price": 180.00
 }
 ```
 
