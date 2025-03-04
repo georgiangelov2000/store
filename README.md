@@ -1,3 +1,4 @@
+# Please deploy the application in the /var/www directory.
 # BINDING HOST TO AN INTERNAL DOCKER CONTAINER APPLICATION WITH NGINX
 
 ## Overview
