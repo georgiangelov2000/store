@@ -1,4 +1,9 @@
-# Please deploy the application in the /var/www directory.
+## Deployment Instructions
+Please deploy the application in the `/var/www` directory.
+
+### Internal Docker Nginx Configuration  
+The Nginx configuration files are located in `/var/www/store/nginx`.
+
 # BINDING HOST TO AN INTERNAL DOCKER CONTAINER APPLICATION WITH NGINX
 
 ## Overview
